@@ -2,9 +2,11 @@ import bodyParser from "body-parser";
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import { RedisClient } from "./db/redis";
-import Redis from "ioredis";
-// Load environment variables from .env file
+import session from "express-session";
+import MongoStore from "connect-mongo";
+import authRouter from "./routes/authRoute";
+
+// Load environment variables
 dotenv.config();
 
 const app = express();
@@ -13,6 +15,23 @@ const PORT = process.env.PORT || 3000;
 // Middleware to parse request bodies
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Session middleware
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "supersecretkey",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.DB_URI || "mongodb://localhost:27017/amplifyx",
+    }),
+    cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 1 day
+  })
+);
 
 // Connect to MongoDB
 const connectToDB = async () => {
@@ -29,18 +48,10 @@ const connectToDB = async () => {
 
 connectToDB();
 
-// Basic route
-app.get("/", (req, res) => {
-  res.json({
-    msg: "ok",
-  });
-});
+// Routes
 
-// Placeholder for routes like `/api1/v1/`
-
-(() => {
- const client=RedisClient.getInstance();
-})();
+// Routes
+app.use("/api/auth", authRouter);
 
 // Start the server
 app.listen(PORT, () => {
