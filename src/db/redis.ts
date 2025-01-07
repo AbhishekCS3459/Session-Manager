@@ -3,19 +3,21 @@ import Redis from "ioredis";
 export class RedisClient {
   private static instance: RedisClient;
   private client: Redis;
+  private connected: boolean = false; // Track if Redis is already connected
 
   private constructor() {
     this.client = new Redis({
-      host:
-        process.env.REDIS_HOST ||
-        "redis-14614.c135.eu-central-1-1.ec2.cloud.redislabs.com",
+      host: process.env.REDIS_HOST || "redis-14614.c135.eu-central-1-1.ec2.cloud.redislabs.com",
       port: parseInt(process.env.REDIS_PORT || "14614"),
       username: "default",
       password: process.env.REDIS_PASSWORD || "password",
     });
 
     this.client.on("connect", () => {
-      console.log("Redis connected 🟢");
+      if (!this.connected) {
+        console.log("Redis connected 🟢");
+        this.connected = true; // Set the flag to true after the first connection
+      }
     });
 
     this.client.on("error", (err: any) => {
@@ -28,6 +30,9 @@ export class RedisClient {
       RedisClient.instance = new RedisClient();
     }
     return RedisClient.instance;
+  }
+  public getClient(): Redis {
+    return this.client;
   }
 
   async fetch(): Promise<string> {
