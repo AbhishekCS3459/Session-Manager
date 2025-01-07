@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 import { authenticate } from "./middlewares/authMiddleware";
 import preferenceRouter from "./routes/preferencesRoute";
 import { createClient } from "redis";
+import { CustomRedisStore } from "./db/CustomRedisStore";
 
 // Load environment variables
 dotenv.config();
@@ -30,29 +31,22 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-// Initialize Redis client
-const redisClient = createClient({
-  url: process.env.UPSTASH_URL || "redis://localhost:6379",
-});
 
-redisClient
-  .connect()
-  .then(() => {
-    console.log("Redis connected 🟢");
-  })
-  .catch((err) => {
-    console.log("Error connecting to Redis", err);
-  });
+
+
+
 // initialize the express session
+const redisStore = new CustomRedisStore();
 app.use(
   session({
+    store: redisStore, // Use the custom Redis store
     secret: process.env.SESSION_SECRET || "SECRET",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 3,
+      maxAge: 30 * 60 * 1000, // 30 minutes
     },
   })
 );
