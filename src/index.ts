@@ -5,6 +5,9 @@ import dotenv from "dotenv";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import authRouter from "./routes/authRoute";
+import cookieParser from "cookie-parser";
+import { authenticate } from "./middlewares/authMiddleware";
+import preferenceRouter from "./routes/preferencesRoute";
 
 // Load environment variables
 dotenv.config();
@@ -15,10 +18,12 @@ const PORT = process.env.PORT || 3000;
 // Middleware to parse request bodies
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Session middleware
 app.use(
@@ -49,9 +54,12 @@ const connectToDB = async () => {
 connectToDB();
 
 // Routes
-
+app.get("/",authenticate, (req, res) => {
+  res.send("Hello World");
+})
 // Routes
 app.use("/api/auth", authRouter);
+app.use("/api", preferenceRouter);
 
 // Start the server
 app.listen(PORT, () => {
