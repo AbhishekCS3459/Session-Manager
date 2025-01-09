@@ -17,8 +17,10 @@ declare module "express-session" {
     user?: { name: string; email: string };
     pagesVisited?: string[];
     startTime?: Date | string;
+    actions?: { action: string; timestamp: Date }[];
   }
 }
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;

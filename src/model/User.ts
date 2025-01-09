@@ -27,7 +27,17 @@ const UserSchema: Schema = new Schema({
   sessionData: {
     pagesVisited: { type: [String], default: [] },
     startTime: { type: Date },
+    actions: {
+      type: [
+        {
+          action: { type: String, required: true },
+          timestamp: { type: Date, required: true },
+        },
+      ],
+      default: [],
+    },
   },
 });
+
 
 export default mongoose.model<IUser>("User", UserSchema);
