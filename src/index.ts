@@ -21,7 +21,6 @@ declare module "express-session" {
   }
 }
 
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -64,7 +63,9 @@ connectToDB();
 app.use("/api/auth", authRouter);
 app.use("/api", preferenceRouter);
 app.use("/api/session", sessionRouter);
-
+app.use("/", (req, res) => {
+  res.send("Welcome to amplifyx web server");
+});
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
