@@ -29,7 +29,16 @@ This project is a **Session Management and User Preferences API** built using No
 - **Session Tracking**: Log and retrieve session data, including pages visited and user activities.
 - **Dynamic Preference Management**: Save and fetch user preferences dynamically for both authenticated and guest users.
 - **Pagination**: Efficient pagination for session data retrieval.
-- **Robust Error Handling**: Comprehensive error messages and status codes.
+🌐 Multi-Device Compatibility: Seamless access to preferences and sessions across devices.
+👤 Sessions for Guests and Authenticated Users: Secure cookie storage for guests, MongoDB for authenticated users.
+🎯 User-Initiated and Trackable Sessions: Manage sessions with details like pages visited and duration.
+⚡ Faster Response Times: Optimized with a Redis cache layer.
+🎨 User Preferences Management: API-driven, secure storage for preferences like themes and languages.
+🔄 Cross-Device Session Syncing: Sync session data for authenticated users.
+⏳ Session Expiry: Auto-expiry after 30 minutes of inactivity.
+🛡️ Error Handling and Validation: Robust validation and meaningful error responses.
+📊 Activity Tracking: Log user actions like "clicked on Settings" in MongoDB or Redis.
+📄 Pagination for Sessions: Efficient handling of large session data with paginated responses.
 
 ---
 
