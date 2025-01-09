@@ -7,6 +7,8 @@ This project is a **Session Management and User Preferences API** built using No
 - **User-Centric**: Enables persistent user sessions and dynamic customization of user preferences.
 - **Secure**: Implements JWT for user authentication and session data encryption.
 - **Efficient**: Uses Redis for fast session handling and MongoDB for structured user data.
+### Sequence Diagram
+![image](https://github.com/user-attachments/assets/053df767-0f82-4d53-9d7a-e0f11a9fd0ad)
 
 ### How It Works
 1. **Authentication**: Secure user registration and login with JWT tokens.
